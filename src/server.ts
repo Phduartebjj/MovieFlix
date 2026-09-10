@@ -94,6 +94,23 @@ app.put('/movies/:id', async (req, res) => {
     res.status(200).send({ message: 'Filme atualizado com sucesso' });
 });
 
+app.get('/movies/:id', async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+        const movie = await prisma.movie.findUnique({
+            where: {
+                id,
+            },
+        });
+        if (!movie) {
+            return res.status(404).send({ message: 'Filme não encontrado' });
+        }
+        res.json(movie);
+    } catch (error) {
+        return res.status(500).send({ message: 'Falha ao buscar filme' });
+    }
+});
+
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
