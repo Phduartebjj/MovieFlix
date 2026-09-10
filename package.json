@@ -30,6 +30,8 @@
         "typescript": "^7.0.2"
     },
     "dependencies": {
-        "express": "^5.2.1"
+        "@prisma/client": "^4.13.0",
+        "express": "^5.2.1",
+        "prisma": "^4.13.0"
     }
 }
