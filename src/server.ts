@@ -1,6 +1,9 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../swagger.json' with { type: 'json' };
+
 const prisma = new PrismaClient();
 
 const port = 3000;
@@ -9,6 +12,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/movies', async (_, res) => {
     const movies = await prisma.movie.findMany({
@@ -135,7 +139,7 @@ app.delete('/movies/:id', async (req, res) => {
         return res.status(500).send({ message: 'Falha ao deletar filme' });
     }
 
-    res.status(200).send({ message: 'Filme deletado com sucesso' });
+    res.status(204).send({ message: 'Filme deletado com sucesso' });
 });
 
 app.get('/movies/genre/:genreName', async (req, res) => {

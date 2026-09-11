@@ -1,0 +1,437 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Filmes",
+        "description": "API para gerenciamento de filmes do MovieFlix",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000"
+        }
+    ],
+    "paths": {
+        "/movies": {
+            "get": {
+                "summary": "Obter todos os filmes",
+                "description": "Retorna todos os filmes cadastrados, ordenados pelo título.",
+                "responses": {
+                    "200": {
+                        "description": "Lista de filmes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Movie"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            "post": {
+                "summary": "Adicionar um novo filme",
+                "description": "Cadastra um novo filme.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovieInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Filme criado com sucesso"
+                    },
+                    "409": {
+                        "description": "Já existe um filme cadastrado com esse título",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Falha ao cadastrar filme",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/movies/{id}": {
+            "get": {
+                "summary": "Obter um filme pelo ID",
+                "description": "Retorna um filme específico pelo seu ID.",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/MovieId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Filme encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Movie"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Filme não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Falha ao buscar filme",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            "put": {
+                "summary": "Atualizar um filme",
+                "description": "Atualiza os dados de um filme existente.",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/MovieId"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovieInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Filme atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Success"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Filme não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Falha ao atualizar filme",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            "delete": {
+                "summary": "Excluir um filme",
+                "description": "Exclui um filme pelo seu ID.",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/MovieId"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Filme excluído com sucesso"
+                    },
+                    "404": {
+                        "description": "Filme não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Falha ao deletar filme",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/movies/genre/{genreName}": {
+            "get": {
+                "summary": "Filtrar filmes por gênero",
+                "description": "Retorna todos os filmes pertencentes ao gênero informado. A busca não diferencia letras maiúsculas e minúsculas.",
+                "parameters": [
+                    {
+                        "name": "genreName",
+                        "in": "path",
+                        "required": true,
+                        "description": "Nome do gênero do filme",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Ação",
+                                "Suspense",
+                                "Aventura",
+                                "Terror",
+                                "Drama",
+                                "Comédia",
+                                "Romance"
+                            ]
+                        },
+                        "example": "Ação"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de filmes filtrados pelo gênero",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Movie"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Falha ao buscar filmes por gênero",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    "components": {
+        "parameters": {
+            "MovieId": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "description": "ID do filme",
+                "schema": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+
+        "schemas": {
+            "Movie": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "ID do filme",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "Título do filme",
+                        "example": "Interestelar"
+                    },
+                    "genre_id": {
+                        "type": "integer",
+                        "description": "ID do gênero",
+                        "example": 3
+                    },
+                    "language_id": {
+                        "type": "integer",
+                        "description": "ID do idioma",
+                        "example": 2
+                    },
+                    "oscar_count": {
+                        "type": "integer",
+                        "description": "Quantidade de Oscars ganhos pelo filme",
+                        "example": 1
+                    },
+                    "release_data": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Data de lançamento do filme",
+                        "example": "2014-10-26"
+                    },
+                    "genres": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "description": "ID do gênero",
+                                "example": 3
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "Nome do gênero",
+                                "example": "Aventura"
+                            }
+                        }
+                    },
+                    "languages": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "description": "ID do idioma",
+                                "example": 2
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "Nome do idioma",
+                                "example": "Inglês"
+                            }
+                        }
+                    }
+                }
+            },
+
+            "MovieInput": {
+                "type": "object",
+                "required": [
+                    "title",
+                    "genre_id",
+                    "language_id",
+                    "oscar_count",
+                    "release_data"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Título do filme",
+                        "example": "Interestelar"
+                    },
+                    "genre_id": {
+                        "type": "integer",
+                        "description": "ID do gênero",
+                        "example": 3
+                    },
+                    "language_id": {
+                        "type": "integer",
+                        "description": "ID do idioma",
+                        "example": 2
+                    },
+                    "oscar_count": {
+                        "type": "integer",
+                        "description": "Quantidade de Oscars ganhos pelo filme",
+                        "example": 1
+                    },
+                    "release_data": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Data de lançamento do filme",
+                        "example": "2014-10-26"
+                    }
+                }
+            },
+
+            "Genre": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "ID do gênero",
+                        "example": 3
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Nome do gênero",
+                        "example": "Aventura"
+                    }
+                }
+            },
+
+            "Language": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "ID do idioma",
+                        "example": 2
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Nome do idioma",
+                        "example": "Inglês"
+                    }
+                }
+            },
+
+            "Error": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Mensagem de erro",
+                        "example": "Filme não encontrado"
+                    }
+                }
+            },
+
+            "Success": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso",
+                        "example": "Filme atualizado com sucesso"
+                    }
+                }
+            }
+        }
+    }
+}
