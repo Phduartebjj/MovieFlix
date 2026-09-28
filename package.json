@@ -32,7 +32,7 @@
         "typescript": "^7.0.2"
     },
     "dependencies": {
-        "@prisma/client": "^4.13.0",
+        "@prisma/client": "^4.16.2",
         "@types/swagger-ui-express": "^4.1.8",
         "express": "^5.2.1",
         "prisma": "^4.13.0",

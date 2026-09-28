@@ -1,18 +1,8 @@
-import express from 'express';
 import { PrismaClient } from '@prisma/client';
-import cors from 'cors';
-import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from '../swagger.json' with { type: 'json' };
-
+import app from './app.js';
 const prisma = new PrismaClient();
 
 const port = 3000;
-
-const app = express();
-
-app.use(express.json());
-app.use(cors());
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/movies', async (_, res) => {
     const movies = await prisma.movie.findMany({
