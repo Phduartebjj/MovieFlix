@@ -18,7 +18,22 @@ export class MoviesRepository {
         return await prisma.movie.findUnique({
             where: {
                 id,
-            }
+            },
+        });
+    }
+
+    async getMoviesByGenre(genreName: string) {
+        return await prisma.movie.findMany({
+            include: {
+                genres: true,
+                languages: true,
+            },
+            where: {
+                genres: {
+                    name: genreName,
+                    mode: 'insensitive',
+                },
+            },
         });
     }
 }

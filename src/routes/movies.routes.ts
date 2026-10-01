@@ -8,9 +8,12 @@ router.get(
     '/:id',
     MoviesController.prototype.getMovieById.bind(MoviesController)
 );
+router.get(
+    '/genre/:genreName',
+    MoviesController.prototype.getMoviesByGenre.bind(MoviesController)
+);
 // router.post('/');
 // router.put('/:id');
 // router.delete('/:id');
-// router.get('/genre/:genreName');
 
 export default router;

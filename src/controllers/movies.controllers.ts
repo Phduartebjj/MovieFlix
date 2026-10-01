@@ -27,4 +27,19 @@ export class MoviesController {
 
         return res.status(200).send(movie);
     }
+
+    async getMoviesByGenre(req: Request, res: Response) {
+        const genreName = req.params.genreName;
+
+        if(!genreName || typeof genreName !== 'string') {
+            return res.status(400).send({ message: 'Nome do gênero inválido' });
+        }
+        const movies = await this.movieService.getMoviesByGenre(genreName);
+
+        if (!movies) {
+            return res.status(404).send({ message: 'Nenhum filme encontrado para o gênero especificado' });
+        }
+
+        return res.status(200).send(movies);
+    }
 }

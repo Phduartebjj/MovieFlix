@@ -14,9 +14,11 @@ export class MoviesService {
 
     async getMovieById(id: number) {
         const movie = await this.MoviesRepository.getMovieById(id);
-
-        
-
         return movie;
+    }
+
+    async getMoviesByGenre(genreName: string) {
+        const movies = await this.MoviesRepository.getMoviesByGenre(genreName);
+        return movies;
     }
 }
