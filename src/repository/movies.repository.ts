@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import type { MovieInterface } from '../models/movies.type.js';
 
 const prisma = new PrismaClient();
 export class MoviesRepository {
@@ -34,6 +35,12 @@ export class MoviesRepository {
                     mode: 'insensitive',
                 },
             },
+        });
+    }
+
+    async createMovie(data: MovieInterface) {
+        return await prisma.movie.create({
+            data,
         });
     }
 }
