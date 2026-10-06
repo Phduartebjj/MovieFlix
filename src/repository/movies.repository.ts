@@ -39,7 +39,21 @@ export class MoviesRepository {
 
     async createMovie(data: MovieInterface) {
         return await prisma.movie.create({
-            data:{
+            data: {
+                title: data.title,
+                release_data: data.release_data,
+                genre_id: data.genre_id,
+                language_id: data.language_id,
+                oscar_count: data.oscar_count,
+            },
+        });
+    }
+    async updateMovie(id: number, data: MovieInterface) {
+        return await prisma.movie.update({
+            where: {
+                id,
+            },
+            data: {
                 title: data.title,
                 release_data: data.release_data,
                 genre_id: data.genre_id,

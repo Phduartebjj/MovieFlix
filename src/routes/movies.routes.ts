@@ -18,7 +18,7 @@ router.get(
     '/genre/:genreName',
     moviesController.getMoviesByGenre.bind(moviesController)
 );
-// router.post('/');
+router.post('/', moviesController.createMovie.bind(moviesController));
 // router.put('/:id');
 // router.delete('/:id');
 

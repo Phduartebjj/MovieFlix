@@ -25,7 +25,7 @@ model Language {
 
 model Movie {
   id           Int       @id @default(autoincrement())
-  title        String?   @db.VarChar(100)
+  title        String   @db.VarChar(100)
   release_data DateTime? @db.Date
   genre_id     Int?
   language_id  Int?

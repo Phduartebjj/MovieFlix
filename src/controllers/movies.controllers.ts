@@ -37,12 +37,9 @@ export class MoviesController {
         const movies = await this.movieService.getMoviesByGenre(genreName);
 
         if (!movies) {
-            return res
-                .status(404)
-                .send({
-                    message:
-                        'Nenhum filme encontrado para o gênero especificado',
-                });
+            return res.status(404).send({
+                message: 'Nenhum filme encontrado para o gênero especificado',
+            });
         }
 
         return res.status(200).send(movies);
@@ -64,5 +61,24 @@ export class MoviesController {
         }
 
         return res.status(201).send(movie);
+    }
+
+    async updateMovie(req: Request, res: Response) {
+        const id = Number(req.params.id);
+        const movieData = req.body;
+
+        if (!movieData || typeof movieData !== 'object') {
+            return res
+                .status(400)
+                .send({ message: 'Dados do filme inválidos' });
+        }
+
+        const movie = await this.movieService.updateMovie(id, movieData);
+
+        if (!movie) {
+            return res.status(404).send({ message: 'Filme não encontrado' });
+        }
+
+        return res.status(200).send(movie);
     }
 }

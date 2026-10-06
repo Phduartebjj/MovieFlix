@@ -11,7 +11,7 @@ export class MoviesService {
     async getAllMovies() {
         const movies = await this.MoviesRepository.getAllMovies();
 
-        if(!movies || movies.length === 0) {
+        if (!movies || movies.length === 0) {
             throw new Error('Nenhum filme encontrado');
         }
 
@@ -40,7 +40,29 @@ export class MoviesService {
         return movies;
     }
 
+    async updateMovie(id: number, data: MovieInterface) {
+        const updatedMovie = await this.MoviesRepository.updateMovie(id, data);
+
+        if (!updatedMovie) {
+            throw new Error('Erro ao atualizar o filme');
+        }
+
+        return updatedMovie;
+    }
+
     async createMovie(data: MovieInterface) {
+        if (!data.title || data.title.trim() === '') {
+            throw new Error('Título do filme é obrigatório');
+        }
+
+        if (data.oscar_count !== null && data.oscar_count < 0) {
+            throw new Error('Quantidade de Oscars não pode ser negativa');
+        }
+
+        if (data.release_data !== null && isNaN(data.release_data.getTime())) {
+            throw new Error('Data de lançamento inválida');
+        }
+
         const movie = await this.MoviesRepository.createMovie(data);
 
         if (!movie) {

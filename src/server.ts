@@ -4,41 +4,41 @@ const prisma = new PrismaClient();
 
 const port = 3000;
 
-app.post('/movies', async (req, res) => {
-    const { title, genre_id, language_id, oscar_count, release_data } =
-        req.body;
-    console.log(req.body);
-    try {
-        //case insentive - se abusca for feita john ou John, o registro vai ser retornado na consulta.
+// app.post('/movies', async (req, res) => {
+//     const { title, genre_id, language_id, oscar_count, release_data } =
+//         req.body;
+//     console.log(req.body);
+//     try {
+//         //case insentive - se abusca for feita john ou John, o registro vai ser retornado na consulta.
 
-        //case sensitive - se a busca for feita john ou John, o registro não vai ser retornado na consulta, ou seja vai dizer que o filme não é o mesmo.
-        const movieWithSameTitle = await prisma.movie.findFirst({
-            where: {
-                title: { equals: title, mode: 'insensitive' },
-            },
-        });
+//         //case sensitive - se a busca for feita john ou John, o registro não vai ser retornado na consulta, ou seja vai dizer que o filme não é o mesmo.
+//         const movieWithSameTitle = await prisma.movie.findFirst({
+//             where: {
+//                 title: { equals: title, mode: 'insensitive' },
+//             },
+//         });
 
-        if (movieWithSameTitle) {
-            return res.status(409).send({
-                message: 'Já existe um filme cadastrado com esse título',
-            });
-        }
+//         if (movieWithSameTitle) {
+//             return res.status(409).send({
+//                 message: 'Já existe um filme cadastrado com esse título',
+//             });
+//         }
 
-        await prisma.movie.create({
-            data: {
-                title,
-                genre_id: Number(genre_id),
-                language_id: Number(language_id),
-                oscar_count: Number(oscar_count),
-                release_data: new Date(release_data),
-            },
-        });
-    } catch (error) {
-        return res.status(500).send({ message: 'Falha ao cadastrar filme' });
-    }
+//         await prisma.movie.create({
+//             data: {
+//                 title,
+//                 genre_id: Number(genre_id),
+//                 language_id: Number(language_id),
+//                 oscar_count: Number(oscar_count),
+//                 release_data: new Date(release_data),
+//             },
+//         });
+//     } catch (error) {
+//         return res.status(500).send({ message: 'Falha ao cadastrar filme' });
+//     }
 
-    res.status(201).send();
-});
+//     res.status(201).send();
+// });
 
 app.put('/movies/:id', async (req, res) => {
     //pegar o id do registro que vai ser atualizado
@@ -103,28 +103,28 @@ app.delete('/movies/:id', async (req, res) => {
     res.status(204).send({ message: 'Filme deletado com sucesso' });
 });
 
-app.get('/movies/genre/:genreName', async (req, res) => {
-    try {
-        const moviesFilteredByGenre = await prisma.movie.findMany({
-            include: {
-                genres: true,
-                languages: true,
-            },
-            where: {
-                genres: {
-                    name: {
-                        equals: req.params.genreName,
-                        mode: 'insensitive',
-                    },
-                },
-            },
-        });
+// app.get('/movies/genre/:genreName', async (req, res) => {
+//     try {
+//         const moviesFilteredByGenre = await prisma.movie.findMany({
+//             include: {
+//                 genres: true,
+//                 languages: true,
+//             },
+//             where: {
+//                 genres: {
+//                     name: {
+//                         equals: req.params.genreName,
+//                         mode: 'insensitive',
+//                     },
+//                 },
+//             },
+//         });
 
-        res.status(200).send(moviesFilteredByGenre);
-    } catch (error) {
-        res.status(500).send({ message: 'Falha ao buscar filmes por gênero' });
-    }
-});
+//         res.status(200).send(moviesFilteredByGenre);
+//     } catch (error) {
+//         res.status(500).send({ message: 'Falha ao buscar filmes por gênero' });
+//     }
+// });
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
