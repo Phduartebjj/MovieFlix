@@ -97,6 +97,6 @@ export class MoviesController {
 
         const deletedMovie = await this.movieService.deleteMovie(id);
 
-        return res.status(200).send({message:`Filme deletado com sucesso ${deletedMovie}`});
+        return res.status(200).send({message:`Filme deletado com sucesso`});
     }
 }
