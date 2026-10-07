@@ -62,4 +62,11 @@ export class MoviesRepository {
             },
         });
     }
+    async deleteMovie(id: number) {
+        return await prisma.movie.delete({
+            where: {
+                id,
+            },
+        });
+    }
 }

@@ -71,4 +71,14 @@ export class MoviesService {
 
         return movie;
     }
+
+    async deleteMovie(id: number) {
+        if (!id) {
+            throw new Error('Id não reconhecido');
+        }
+
+        const deletedMovie = await this.MoviesRepository.deleteMovie(id);
+
+        return deletedMovie;
+    }
 }

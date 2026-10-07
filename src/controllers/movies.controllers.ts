@@ -87,4 +87,16 @@ export class MoviesController {
 
         return res.status(200).send(movie);
     }
+
+    async deleteMovie(req: Request, res: Response) {
+        const id = Number(req.body.id);
+
+        if (isNaN(id)) {
+            return res.status(400).send({ message: 'Id não identificado' });
+        }
+
+        const deletedMovie = this.movieService.deleteMovie(id);
+
+        return res.status(200).send({message:`Filme deletado com sucesso ${deletedMovie}`});
+    }
 }
