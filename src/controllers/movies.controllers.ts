@@ -67,6 +67,12 @@ export class MoviesController {
         const id = Number(req.params.id);
         const movieData = req.body;
 
+        if (isNaN(id)) {
+            return res.status(400).send({
+                message: 'ID do filme inválido',
+            });
+        }
+
         if (!movieData || typeof movieData !== 'object') {
             return res
                 .status(400)
