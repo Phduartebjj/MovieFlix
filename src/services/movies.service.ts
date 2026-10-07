@@ -11,7 +11,7 @@ export class MoviesService {
     async getAllMovies() {
         const movies = await this.MoviesRepository.getAllMovies();
 
-        if (!movies || movies.length === 0) {
+        if (!movies) {
             throw new Error('Nenhum filme encontrado');
         }
 

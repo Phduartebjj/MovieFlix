@@ -9,11 +9,8 @@ const moviesService = new MoviesService();
 const moviesController = new MoviesController(moviesService);
 
 router.get('/', moviesController.getAllMovies.bind(moviesController));
+router.get('/genre/:genreName',moviesController.getMoviesByGenre.bind(moviesController));
 router.get('/:id', moviesController.getMovieById.bind(moviesController));
-router.get(
-    '/genre/:genreName',
-    moviesController.getMoviesByGenre.bind(moviesController)
-);
 router.post(
     '/',
     movieMiddleware,
