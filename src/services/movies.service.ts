@@ -1,38 +1,40 @@
+import { BadRequestError } from '../errors/bad-request.js';
+import { NotFoundError } from '../errors/not-found.error.js';
 import type { MovieInterface } from '../models/movies.type.js';
 import { MoviesRepository } from '../repository/movies.repository.js';
 
 export class MoviesService {
-    private MoviesRepository: MoviesRepository;
+    private moviesRepository: MoviesRepository;
 
     constructor() {
-        this.MoviesRepository = new MoviesRepository();
+        this.moviesRepository = new MoviesRepository();
     }
 
     async getAllMovies() {
-        const movies = await this.MoviesRepository.getAllMovies();
+        const movies = await this.moviesRepository.getAllMovies();
 
         if (movies.length === 0) {
-            throw new Error('Nenhum filme encontrado');
+            throw new NotFoundError('Nenhum filme encontrado');
         }
 
         return movies;
     }
 
     async getMovieById(id: number) {
-        const movie = await this.MoviesRepository.getMovieById(id);
+        const movie = await this.moviesRepository.getMovieById(id);
 
         if (!movie) {
-            throw new Error('Filme não encontrado');
+            throw new NotFoundError('Filme não encontrado');
         }
 
         return movie;
     }
 
     async getMoviesByGenre(genreName: string) {
-        const movies = await this.MoviesRepository.getMoviesByGenre(genreName);
+        const movies = await this.moviesRepository.getMoviesByGenre(genreName);
 
-        if (!movies || movies.length === 0) {
-            throw new Error(
+        if (movies.length === 0) {
+            throw new NotFoundError(
                 'Nenhum filme encontrado para o gênero especificado'
             );
         }
@@ -41,31 +43,33 @@ export class MoviesService {
     }
 
     async updateMovie(id: number, data: MovieInterface) {
-        return await this.MoviesRepository.updateMovie(id, data);
+        return await this.moviesRepository.updateMovie(id, data);
     }
 
     async createMovie(data: MovieInterface) {
         if (!data.title || data.title.trim() === '') {
-            throw new Error('Título do filme é obrigatório');
+            throw new BadRequestError('Título do filme é obrigatório');
         }
 
         if (data.oscar_count !== null && data.oscar_count < 0) {
-            throw new Error('Quantidade de Oscars não pode ser negativa');
+            throw new BadRequestError(
+                'Quantidade de Oscars não pode ser negativa'
+            );
         }
 
         if (data.release_data !== null && isNaN(data.release_data.getTime())) {
-            throw new Error('Data de lançamento inválida');
+            throw new BadRequestError('Data de lançamento inválida');
         }
 
-        return await this.MoviesRepository.createMovie(data);
+        return await this.moviesRepository.createMovie(data);
     }
 
     async deleteMovie(id: number) {
         if (id <= 0) {
-            throw new Error('Id não reconhecido');
+            throw new BadRequestError('Id não reconhecido');
         }
 
-        const deletedMovie = await this.MoviesRepository.deleteMovie(id);
+        const deletedMovie = await this.moviesRepository.deleteMovie(id);
 
         return deletedMovie;
     }
