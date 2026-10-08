@@ -11,7 +11,7 @@ export class MoviesService {
     async getAllMovies() {
         const movies = await this.MoviesRepository.getAllMovies();
 
-        if (!movies) {
+        if (movies.length === 0) {
             throw new Error('Nenhum filme encontrado');
         }
 
@@ -41,13 +41,7 @@ export class MoviesService {
     }
 
     async updateMovie(id: number, data: MovieInterface) {
-        const updatedMovie = await this.MoviesRepository.updateMovie(id, data);
-
-        if (!updatedMovie) {
-            throw new Error('Erro ao atualizar o filme');
-        }
-
-        return updatedMovie;
+        return await this.MoviesRepository.updateMovie(id, data);
     }
 
     async createMovie(data: MovieInterface) {
@@ -63,17 +57,11 @@ export class MoviesService {
             throw new Error('Data de lançamento inválida');
         }
 
-        const movie = await this.MoviesRepository.createMovie(data);
-
-        if (!movie) {
-            throw new Error('Erro ao criar o filme');
-        }
-
-        return movie;
+        return await this.MoviesRepository.createMovie(data);
     }
 
     async deleteMovie(id: number) {
-        if (!id) {
+        if (id <= 0) {
             throw new Error('Id não reconhecido');
         }
 
