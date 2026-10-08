@@ -42,11 +42,8 @@ export class MoviesService {
         return movies;
     }
 
-    async updateMovie(id: number, data: MovieInterface) {
-        if (
-            data.title !== undefined &&
-            data.title.trim() === ''
-        ) {
+    async updateMovie(id: number, data: Partial<MovieInterface>) {
+        if (data.title !== undefined && data.title.trim() === '') {
             throw new BadRequestError('Título do filme é obrigatório');
         }
 
