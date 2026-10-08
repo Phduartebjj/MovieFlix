@@ -8,8 +8,6 @@ export function errorMiddleware(
     res: Response,
     next: NextFunction
 ) {
-    console.error(err);
-
     if (err instanceof NotFoundError) {
         return res.status(404).send({
             message: err.message,
